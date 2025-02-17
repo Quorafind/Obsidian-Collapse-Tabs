@@ -1,12 +1,13 @@
 {
-	"name": "collapse-view",
+	"name": "collapse-tabs",
 	"version": "1.0.0",
-	"description": "Collapse view in sidebars",
+	"description": "Collapse tabs in sidebars",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"release": "dotenv release-it --"
 	},
 	"keywords": [],
 	"author": "",
@@ -18,7 +19,13 @@
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
 		"obsidian": "latest",
+		"release-it": "^18.1.2",
+		"semver": "^7.7.1",
 		"tslib": "2.4.0",
-		"typescript": "4.7.4"
+		"typescript": "4.7.4",
+		"@release-it/bumper": "^6.0.1",
+		"dotenv-cli": "^7.4.1",
+		"globby": "^14.0.1",
+		"jszip": "^3.10.1"
 	}
 }
