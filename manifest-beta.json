@@ -1,0 +1,10 @@
+{
+  "id": "collapse-tabs",
+  "name": "Collapse Tabs",
+  "version": "1.1.0",
+  "minAppVersion": "0.15.0",
+  "description": "Adds collapsible functionality to workspace tabs in the sidebar, allowing you to hide tab content with a single click.",
+  "author": "Boninall",
+  "authorUrl": "https://github.com/quorafind",
+  "isDesktopOnly": true
+}
