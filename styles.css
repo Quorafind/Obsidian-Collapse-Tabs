@@ -6,3 +6,74 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+/*
+Styles for the Collapse View plugin
+*/
+
+/* Header wrapper styling */
+.collapse-view-header-wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: 0 4px;
+}
+
+/* Text content styling */
+.collapse-view-text {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-right: 4px;
+
+	font-size: var(--font-ui-small);
+}
+
+/* Collapse button styling */
+.collapse-view-btn {
+	background: transparent;
+	border: none;
+	color: var(--text-muted);
+	cursor: pointer;
+	padding: 0 4px;
+	font-size: var(--font-ui-small);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 24px;
+	height: 24px;
+	border-radius: 4px;
+	transition: background-color 0.15s ease;
+}
+
+.collapse-view-btn:hover {
+	background-color: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.collapse-view-btn[data-collapsed="true"] svg {
+	transform: rotate(-90deg);
+}
+
+/* Ensure the workspace tab header maintains its layout */
+.workspace-tab-header[data-collapse-processed="true"] {
+	padding: 0 !important;
+}
+
+/* Animation for collapse/expand */
+.workspace-tab-content {
+	transition: display 0.2s ease;
+}
+
+.mod-left-split .workspace-tab-header.is-active {
+	background-color: transparent !important;
+}
+
+.workspace-tabs:has(.workspace-leaf-content.is-collapsed) {
+	min-height: var(--header-height) !important;
+	max-height: var(--header-height) !important;
+	flex-shrink: 0;
+	height: auto !important;
+}
