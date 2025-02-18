@@ -1,6 +1,6 @@
 {
 	"name": "collapse-tabs",
-	"version": "1.1.2",
+	"version": "1.2.0",
 	"description": "Collapse tabs in sidebars",
 	"main": "main.js",
 	"scripts": {
