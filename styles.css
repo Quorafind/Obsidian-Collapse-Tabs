@@ -71,6 +71,10 @@ Styles for the Collapse View plugin
 	background-color: transparent !important;
 }
 
+.mod-right-split .workspace-tab-header.is-active {
+	background-color: transparent !important;
+}
+
 .workspace-tabs:has(.workspace-leaf-content.is-collapsed) {
 	min-height: var(--header-height) !important;
 	max-height: var(--header-height) !important;

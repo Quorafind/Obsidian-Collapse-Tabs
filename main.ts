@@ -18,16 +18,29 @@ export default class CollapseViewPlugin extends Plugin {
 	}
 
 	private initializeMainObserver() {
-		const modLeftSplit = document.querySelector(".mod-left-split");
+		const modLeftSplit = activeDocument.body.find(".mod-left-split");
+		const modRightSplit = activeDocument.body.find(".mod-right-split");
+
 		if (modLeftSplit) {
-			const observer = new MutationObserver(
+			const leftObserver = new MutationObserver(
 				this.handleMutations.bind(this)
 			);
-			observer.observe(modLeftSplit, {
+			leftObserver.observe(modLeftSplit, {
 				childList: true,
 				subtree: true,
 			});
-			this.observers.set(modLeftSplit, observer);
+			this.observers.set(modLeftSplit, leftObserver);
+		}
+
+		if (modRightSplit) {
+			const rightObserver = new MutationObserver(
+				this.handleMutations.bind(this)
+			);
+			rightObserver.observe(modRightSplit, {
+				childList: true,
+				subtree: true,
+			});
+			this.observers.set(modRightSplit, rightObserver);
 		}
 	}
 
@@ -76,7 +89,20 @@ export default class CollapseViewPlugin extends Plugin {
 					header instanceof HTMLElement &&
 					header.hasAttribute("data-collapse-processed")
 				) {
+					// Remove is-collapsed class from related content
+
 					this.restoreOriginalHeader(header);
+
+					setTimeout(() => {
+						const type = this.getHeaderType(header);
+						const relatedContent = this.findRelatedContent(
+							header,
+							type
+						);
+						relatedContent.forEach((content) => {
+							content.toggleClass("is-collapsed", false);
+						});
+					}, 0);
 				}
 			});
 			return;
@@ -95,29 +121,18 @@ export default class CollapseViewPlugin extends Plugin {
 		const originalContent = header.getAttribute("data-original-content");
 		if (!originalContent) return;
 
-		// Get the original flex-grow value
-		const originalFlexGrow = header.getAttribute("data-original-flex-grow");
-
 		// Remove our custom attributes and classes
 		header.removeAttribute("data-collapse-processed");
 		header.removeAttribute("data-original-content");
-		header.removeAttribute("data-original-flex-grow");
 
 		// Restore original content
 		header.empty();
 		header.innerHTML = originalContent;
-
-		// Restore original flex-grow
-		if (originalFlexGrow) {
-			header.style.flexGrow = originalFlexGrow;
-		}
 	}
 
 	private transformTabHeader(header: HTMLElement) {
-		// Store original content and flex-grow before processing
+		// Store original content before processing
 		header.setAttribute("data-original-content", header.innerHTML);
-		const computedStyle = window.getComputedStyle(header);
-		header.setAttribute("data-original-flex-grow", computedStyle.flexGrow);
 
 		// Mark as processed to prevent duplicate processing
 		header.setAttribute("data-collapse-processed", "true");
@@ -195,20 +210,26 @@ export default class CollapseViewPlugin extends Plugin {
 	}
 
 	private toggleCollapse(header: HTMLElement, type: string) {
+		const tabContainer = header.closest(".workspace-tabs");
 		const relatedContent = this.findRelatedContent(header, type);
 
 		if (relatedContent) {
+			const isLastTab =
+				!tabContainer?.nextElementSibling?.hasClass("workspace-tabs");
+
 			relatedContent.forEach((content) => {
 				const isCollapsed = !content.isShown();
 				isCollapsed ? content.show() : content.hide();
-				content.toggleClass("is-collapsed", !isCollapsed);
+				if (!isLastTab) {
+					content.toggleClass("is-collapsed", !isCollapsed);
+				}
 			});
 		}
 	}
 
 	// Public method to manually trigger rendering of all collapse buttons
 	public renderAllCollapseButtons() {
-		const workspaceTabs = document.querySelectorAll(
+		const workspaceTabs = activeDocument.body.findAll(
 			".mod-left-split .workspace-tabs, .mod-right-split .workspace-tabs"
 		);
 		workspaceTabs.forEach((tabs) => {
@@ -220,7 +241,9 @@ export default class CollapseViewPlugin extends Plugin {
 
 	private disconnectAllObservers() {
 		// Get all elements from the WeakMap
-		const elements = document.querySelectorAll("[data-collapse-processed]");
+		const elements = activeDocument.body.findAll(
+			"[data-collapse-processed]"
+		);
 		elements.forEach((element) => {
 			const observer = this.observers.get(element);
 			if (observer) {
