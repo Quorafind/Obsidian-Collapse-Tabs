@@ -168,3 +168,16 @@ Styles for the Collapse View plugin
 	hr.workspace-leaf-resize-handle {
 	pointer-events: none;
 }
+
+.workspace-tabs:has(
+		.workspace-tab-header-container-inner:has(
+				.workspace-tab-header:nth-child(2)
+			)
+	)
+	.workspace-leaf-content.is-collapsed {
+	display: block;
+}
+
+.workspace-leaf-content.is-collapsed {
+	display: none;
+}

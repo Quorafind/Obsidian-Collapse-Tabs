@@ -149,10 +149,11 @@ export default class CollapseViewPlugin extends Plugin {
 
 		const content = this.extractHeaderContent(header);
 		const type = this.getHeaderType(header);
-		
+
 		// Check current content state
 		const relatedContent = this.findRelatedContent(header, type);
-		const isContentCollapsed = relatedContent.length > 0 && !relatedContent[0].isShown();
+		const isContentCollapsed =
+			relatedContent.length > 0 && !relatedContent[0].isShown();
 
 		header.empty();
 
@@ -227,7 +228,6 @@ export default class CollapseViewPlugin extends Plugin {
 		if (relatedContent) {
 			for (const content of relatedContent) {
 				const isCollapsed = !content.isShown();
-				isCollapsed ? content.show() : content.hide();
 				content.toggleClass("is-collapsed", !isCollapsed);
 			}
 		}
