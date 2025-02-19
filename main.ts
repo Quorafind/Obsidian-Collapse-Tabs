@@ -1,9 +1,22 @@
-import { Plugin, setIcon } from "obsidian";
+import { App, Plugin, PluginSettingTab, setIcon, Setting } from "obsidian";
+
+interface CollapseViewSettings {
+	moveToggleButton: boolean;
+}
+
+export const COLLAPSE_TABS_SETTINGS: CollapseViewSettings = {
+	moveToggleButton: true,
+};
 
 export default class CollapseViewPlugin extends Plugin {
 	private observers: WeakMap<Element, MutationObserver>;
+	settings: CollapseViewSettings;
 
 	async onload() {
+		await this.loadSettings();
+		this.addSettingTab(new CollapseTabsSettingTab(this.app, this));
+		this.toggleCollapseButton();
+
 		this.observers = new WeakMap();
 
 		this.app.workspace.onLayoutReady(() => {
@@ -251,5 +264,49 @@ export default class CollapseViewPlugin extends Plugin {
 			}
 		});
 		this.observers = new WeakMap();
+	}
+
+	public toggleCollapseButton() {
+		document.body.toggleClass(
+			"move-collapse-button",
+			this.settings.moveToggleButton
+		);
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign(
+			{},
+			COLLAPSE_TABS_SETTINGS,
+			await this.loadData()
+		);
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
+		this.toggleCollapseButton();
+	}
+}
+
+export class CollapseTabsSettingTab extends PluginSettingTab {
+	private plugin: CollapseViewPlugin;
+
+	constructor(app: App, plugin: CollapseViewPlugin) {
+		super(app, plugin);
+		this.plugin = plugin;
+	}
+
+	display() {
+		this.containerEl.empty();
+
+		new Setting(this.containerEl)
+			.setName("Move toggle button")
+			.setDesc("Move the toggle button to the left of the tab header")
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.moveToggleButton);
+				toggle.onChange((value) => {
+					this.plugin.settings.moveToggleButton = value;
+					this.plugin.saveSettings();
+				});
+			});
 	}
 }
