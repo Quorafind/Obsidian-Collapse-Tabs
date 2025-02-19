@@ -223,20 +223,14 @@ export default class CollapseViewPlugin extends Plugin {
 	}
 
 	private toggleCollapse(header: HTMLElement, type: string) {
-		const tabContainer = header.closest(".workspace-tabs");
 		const relatedContent = this.findRelatedContent(header, type);
 
 		if (relatedContent) {
-			const isLastTab =
-				!tabContainer?.nextElementSibling?.hasClass("workspace-tabs");
-
-			relatedContent.forEach((content) => {
+			for (const content of relatedContent) {
 				const isCollapsed = !content.isShown();
 				isCollapsed ? content.show() : content.hide();
-				if (!isLastTab) {
-					content.toggleClass("is-collapsed", !isCollapsed);
-				}
-			});
+				content.toggleClass("is-collapsed", !isCollapsed);
+			}
 		}
 	}
 

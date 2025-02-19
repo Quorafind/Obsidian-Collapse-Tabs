@@ -75,7 +75,9 @@ Styles for the Collapse View plugin
 	background-color: transparent !important;
 }
 
-.workspace-tabs:has(.workspace-leaf-content.is-collapsed) {
+.workspace-tabs:has(.workspace-leaf-content.is-collapsed):not(
+		.workspace-split.mod-horizontal.mod-sidedock .workspace-tabs:last-child
+	) {
 	min-height: var(--header-height) !important;
 	max-height: var(--header-height) !important;
 	flex-shrink: 0;
@@ -116,6 +118,9 @@ Styles for the Collapse View plugin
 	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed)
 	.workspace-tabs.mod-top.mod-top-left-space:has(
 		.workspace-leaf-content.is-collapsed
+	):not(
+		.workspace-split.mod-horizontal.mod-sidedock.mod-left-split
+			.workspace-tabs:last-child
 	) {
 	min-height: calc(var(--header-height) * 2) !important;
 	max-height: calc(var(--header-height) * 2) !important;
