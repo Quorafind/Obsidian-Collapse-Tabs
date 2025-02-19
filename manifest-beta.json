@@ -1,7 +1,7 @@
 {
   "id": "collapse-tabs",
   "name": "Collapse Tabs",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "minAppVersion": "0.15.0",
   "description": "Adds collapsible functionality to workspace tabs in the sidebar, allowing you to hide tab content with a single click.",
   "author": "Boninall",
