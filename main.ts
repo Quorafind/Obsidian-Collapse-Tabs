@@ -98,7 +98,7 @@ export default class CollapseViewPlugin extends Plugin {
 
 		// If there's more than one header, restore any processed headers and return
 		if (headers.length > 1) {
-			for (const header of headers) {
+			for (const header of Array.from(headers)) {
 				if (
 					header instanceof HTMLElement &&
 					header.hasAttribute("data-collapse-processed")
@@ -121,7 +121,7 @@ export default class CollapseViewPlugin extends Plugin {
 		}
 
 		// Process single header case
-		for (const header of unprocessedHeaders) {
+		for (const header of Array.from(unprocessedHeaders)) {
 			if (header instanceof HTMLElement) {
 				this.transformTabHeader(header);
 			}
