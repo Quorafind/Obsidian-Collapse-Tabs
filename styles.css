@@ -111,3 +111,22 @@ Styles for the Collapse View plugin
 	left: calc(var(--size-4-2) + var(--frame-left-space));
 	transition: left 0.2s ease;
 }
+
+.mod-macos.move-collapse-button.is-hidden-frameless:not(.is-fullscreen)
+	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed)
+	.workspace-tabs.mod-top.mod-top-left-space:has(
+		.workspace-leaf-content.is-collapsed
+	) {
+	min-height: calc(var(--header-height) * 2) !important;
+	max-height: calc(var(--header-height) * 2) !important;
+	flex-shrink: 0;
+	height: auto !important;
+}
+
+.mod-macos.move-collapse-button.is-hidden-frameless:not(.is-fullscreen)
+	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed):has(
+		.workspace-leaf-content.is-collapsed
+	)
+	.workspace-tab-header-container {
+	border-bottom: 0px;
+}
