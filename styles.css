@@ -86,14 +86,17 @@ Styles for the Collapse View plugin
 
 .mod-macos.move-collapse-button.is-hidden-frameless:not(.is-fullscreen)
 	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed)
+	.workspace-tabs.mod-top.mod-top-left-space
 	.workspace-tab-header-container {
 	border-top: var(--tab-outline-width) solid var(--tab-outline-color);
+	min-height: calc(var(--header-height) * 2);
+	position: relative;
 }
 
 .mod-macos.move-collapse-button.is-hidden-frameless:not(.is-fullscreen)
 	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed)
 	.workspace-tabs.mod-top.mod-top-left-space {
-	padding-top: calc(var(--header-height) - 1px);
+	/* padding-top: calc(var(--header-height) - 1px); */
 	transition: padding-top 0.2s ease;
 }
 
@@ -109,9 +112,34 @@ Styles for the Collapse View plugin
 	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed)
 	.sidebar-toggle-button.mod-left {
 	position: absolute;
-	top: calc(var(--header-height) * -1);
+	top: 0;
 	left: calc(var(--size-4-2) + var(--frame-left-space));
 	transition: left 0.2s ease;
+	z-index: 1;
+}
+
+.mod-macos.move-collapse-button.is-hidden-frameless:not(.is-fullscreen)
+	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed)
+	.workspace-tabs.mod-top.mod-top-left-space
+	.workspace-tab-header-container-inner {
+	position: absolute;
+	top: calc(var(--header-height) - 2px);
+	left: 0;
+	right: 0;
+	height: calc(var(--header-height) + 1px);
+	padding-left: var(--size-4-2);
+	padding-right: var(--size-4-2);
+	border-top: var(--tab-outline-width) solid var(--tab-outline-color);
+	margin-top: 0;
+	padding-top: var(--size-4-2);
+	background-color: var(--tab-switcher-background);
+}
+
+.mod-macos.move-collapse-button.is-hidden-frameless:not(.is-fullscreen)
+	.workspace-split.mod-horizontal:not(.is-sidedock-collapsed)
+	.workspace-tabs.mod-top.mod-top-left-space
+	.workspace-tab-header-spacer {
+	height: var(--header-height);
 }
 
 .mod-macos.move-collapse-button.is-hidden-frameless:not(.is-fullscreen)
@@ -134,4 +162,9 @@ Styles for the Collapse View plugin
 	)
 	.workspace-tab-header-container {
 	border-bottom: 0px;
+}
+
+.workspace-tabs:has(.workspace-leaf-content.is-collapsed)
+	hr.workspace-leaf-resize-handle {
+	pointer-events: none;
 }

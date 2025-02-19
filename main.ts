@@ -1,4 +1,5 @@
-import { App, Plugin, PluginSettingTab, setIcon, Setting } from "obsidian";
+import { type App, Plugin, setIcon, Setting } from "obsidian";
+import { PluginSettingTab } from "obsidian";
 
 interface CollapseViewSettings {
 	moveToggleButton: boolean;
@@ -97,13 +98,11 @@ export default class CollapseViewPlugin extends Plugin {
 
 		// If there's more than one header, restore any processed headers and return
 		if (headers.length > 1) {
-			headers.forEach((header) => {
+			for (const header of headers) {
 				if (
 					header instanceof HTMLElement &&
 					header.hasAttribute("data-collapse-processed")
 				) {
-					// Remove is-collapsed class from related content
-
 					this.restoreOriginalHeader(header);
 
 					setTimeout(() => {
@@ -112,21 +111,21 @@ export default class CollapseViewPlugin extends Plugin {
 							header,
 							type
 						);
-						relatedContent.forEach((content) => {
+						for (const content of relatedContent) {
 							content.toggleClass("is-collapsed", false);
-						});
+						}
 					}, 0);
 				}
-			});
+			}
 			return;
 		}
 
 		// Process single header case
-		unprocessedHeaders.forEach((header) => {
+		for (const header of unprocessedHeaders) {
 			if (header instanceof HTMLElement) {
 				this.transformTabHeader(header);
 			}
-		});
+		}
 	}
 
 	private restoreOriginalHeader(header: HTMLElement) {
@@ -146,14 +145,14 @@ export default class CollapseViewPlugin extends Plugin {
 	private transformTabHeader(header: HTMLElement) {
 		// Store original content before processing
 		header.setAttribute("data-original-content", header.innerHTML);
-
-		// Mark as processed to prevent duplicate processing
 		header.setAttribute("data-collapse-processed", "true");
 
-		// Extract text content safely
 		const content = this.extractHeaderContent(header);
-
 		const type = this.getHeaderType(header);
+		
+		// Check current content state
+		const relatedContent = this.findRelatedContent(header, type);
+		const isContentCollapsed = relatedContent.length > 0 && !relatedContent[0].isShown();
 
 		header.empty();
 
@@ -172,7 +171,7 @@ export default class CollapseViewPlugin extends Plugin {
 				cls: "collapse-view-btn clickable-icon",
 				attr: {
 					"aria-label": "Toggle collapse",
-					"data-collapsed": "false",
+					"data-collapsed": isContentCollapsed.toString(),
 				},
 			},
 			(el) => {
@@ -239,24 +238,23 @@ export default class CollapseViewPlugin extends Plugin {
 		const workspaceTabs = activeDocument.body.findAll(
 			".mod-left-split .workspace-tabs, .mod-right-split .workspace-tabs"
 		);
-		workspaceTabs.forEach((tabs) => {
+		for (const tabs of workspaceTabs) {
 			if (tabs instanceof HTMLElement) {
 				this.processWorkspaceTabs(tabs);
 			}
-		});
+		}
 	}
 
 	private disconnectAllObservers() {
-		// Get all elements from the WeakMap
 		const elements = activeDocument.body.findAll(
 			"[data-collapse-processed]"
 		);
-		elements.forEach((element) => {
+		for (const element of elements) {
 			const observer = this.observers.get(element);
 			if (observer) {
 				observer.disconnect();
 			}
-		});
+		}
 		this.observers = new WeakMap();
 	}
 
