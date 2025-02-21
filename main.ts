@@ -103,7 +103,7 @@ export default class CollapseViewPlugin extends Plugin {
 					header instanceof HTMLElement &&
 					header.hasAttribute("data-collapse-processed")
 				) {
-					this.restoreOriginalHeader(header);
+					// this.restoreOriginalHeader(header);
 
 					setTimeout(() => {
 						const type = this.getHeaderType(header);
@@ -113,6 +113,13 @@ export default class CollapseViewPlugin extends Plugin {
 						);
 						for (const content of relatedContent) {
 							content.toggleClass("is-collapsed", false);
+						}
+
+						const collapseBtn = header.querySelector(
+							".collapse-view-btn"
+						) as HTMLElement;
+						if (collapseBtn) {
+							collapseBtn.dataset.collapsed = "false";
 						}
 					}, 0);
 				}
@@ -128,23 +135,23 @@ export default class CollapseViewPlugin extends Plugin {
 		}
 	}
 
-	private restoreOriginalHeader(header: HTMLElement) {
-		// Get the original content from data attribute
-		const originalContent = header.getAttribute("data-original-content");
-		if (!originalContent) return;
+	// private restoreOriginalHeader(header: HTMLElement) {
+	// 	// Get the original content from data attribute
+	// 	const originalContent = header.getAttribute("data-original-content");
+	// 	if (!originalContent) return;
 
-		// Remove our custom attributes and classes
-		header.removeAttribute("data-collapse-processed");
-		header.removeAttribute("data-original-content");
+	// 	// Remove our custom attributes and classes
+	// 	header.removeAttribute("data-collapse-processed");
+	// 	header.removeAttribute("data-original-content");
 
-		// Restore original content
-		header.empty();
-		header.innerHTML = originalContent;
-	}
+	// 	// Restore original content
+	// 	header.empty();
+	// 	header.innerHTML = originalContent;
+	// }
 
 	private transformTabHeader(header: HTMLElement) {
 		// Store original content before processing
-		header.setAttribute("data-original-content", header.innerHTML);
+		// header.setAttribute("data-original-content", header.innerHTML);
 		header.setAttribute("data-collapse-processed", "true");
 
 		const content = this.extractHeaderContent(header);
@@ -155,7 +162,7 @@ export default class CollapseViewPlugin extends Plugin {
 		const isContentCollapsed =
 			relatedContent.length > 0 && !relatedContent[0].isShown();
 
-		header.empty();
+		// header.empty();
 
 		const wrapper = header.createEl("div", {
 			cls: "collapse-view-header-wrapper",
@@ -179,7 +186,11 @@ export default class CollapseViewPlugin extends Plugin {
 				setIcon(el, "chevron-down");
 				el.addEventListener("click", (e) => {
 					e.stopPropagation();
-					this.toggleCollapse(header, type);
+					this.toggleCollapse(
+						header,
+						type,
+						el.dataset.collapsed === "true"
+					);
 					el.dataset.collapsed =
 						el.dataset.collapsed === "true" ? "false" : "true";
 				});
@@ -222,12 +233,15 @@ export default class CollapseViewPlugin extends Plugin {
 		return [];
 	}
 
-	private toggleCollapse(header: HTMLElement, type: string) {
+	private toggleCollapse(
+		header: HTMLElement,
+		type: string,
+		isCollapsed: boolean
+	) {
 		const relatedContent = this.findRelatedContent(header, type);
 
 		if (relatedContent) {
 			for (const content of relatedContent) {
-				const isCollapsed = !content.isShown();
 				content.toggleClass("is-collapsed", !isCollapsed);
 			}
 		}

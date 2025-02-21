@@ -177,7 +177,39 @@ Styles for the Collapse View plugin
 	.workspace-leaf-content.is-collapsed {
 	display: block;
 }
-
 .workspace-leaf-content.is-collapsed {
 	display: none;
+}
+
+.workspace-split.mod-left-split
+	.workspace-tab-header-container-inner:has(
+		.workspace-tab-header:nth-child(2)
+	)
+	.collapse-view-header-wrapper,
+.workspace-split.mod-right-split
+	.workspace-tab-header-container-inner:has(
+		.workspace-tab-header:nth-child(2)
+	)
+	.collapse-view-header-wrapper {
+	display: none;
+}
+
+.workspace-split.mod-left-split
+	.workspace-tab-header-container-inner:not(
+		:has(.workspace-tab-header:nth-child(2))
+	)
+	.workspace-tab-header-inner {
+	padding: 0;
+}
+
+.workspace-split.mod-left-split
+	.workspace-tab-header-container-inner:not(
+		:has(.workspace-tab-header:nth-child(2))
+	)
+	.workspace-tab-header-inner-icon {
+	display: none;
+}
+
+.mod-root .collapse-view-header-wrapper {
+	display: none !important;
 }
