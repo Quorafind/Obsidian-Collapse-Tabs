@@ -75,7 +75,12 @@ Styles for the Collapse View plugin
 	background-color: transparent !important;
 }
 
-.workspace-tabs:has(.workspace-leaf-content.is-collapsed):not(
+.mod-left-split
+	.workspace-tabs:has(.workspace-leaf-content.is-collapsed):not(
+		.workspace-split.mod-horizontal.mod-sidedock .workspace-tabs:last-child
+	),
+.mod-right-split
+	.workspace-tabs:has(.workspace-leaf-content.is-collapsed):not(
 		.workspace-split.mod-horizontal.mod-sidedock .workspace-tabs:last-child
 	) {
 	min-height: var(--header-height) !important;
@@ -178,7 +183,7 @@ Styles for the Collapse View plugin
 	display: block;
 }
 .workspace-leaf-content.is-collapsed {
-	display: none;
+	opacity: 0;
 }
 
 .workspace-split.mod-left-split
@@ -212,4 +217,8 @@ Styles for the Collapse View plugin
 
 .mod-root .collapse-view-header-wrapper {
 	display: none !important;
+}
+
+.mod-root .workspace-leaf-content.is-collapsed {
+	opacity: 1 !important;
 }
